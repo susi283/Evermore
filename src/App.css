@@ -1,0 +1,318 @@
+.app-shell {
+  position: relative;
+  min-height: 100vh;
+  background: #070605;
+}
+
+.story-progress {
+  position: fixed;
+  right: clamp(16px, 2.2vw, 34px);
+  top: 50%;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transform: translateY(-50%);
+  color: rgba(255,255,255,.68);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .34em;
+  pointer-events: none;
+}
+
+.progress-divider {
+  width: 1px;
+  height: 52px;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,.58), transparent);
+}
+
+.scroll-hint {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,.52);
+  font-size: 9px;
+  letter-spacing: .27em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.scroll-indicator {
+  width: 21px;
+  height: 34px;
+  border: 1px solid rgba(255,255,255,.28);
+  border-radius: 999px;
+  position: relative;
+}
+
+.scroll-indicator::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 7px;
+  width: 3px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.78);
+  transform: translateX(-50%);
+  animation: indicatorMove 1.8s ease-in-out infinite;
+}
+
+.journey {
+  position: relative;
+  height: calc(100vh + var(--journey-distance));
+  isolation: isolate;
+}
+
+.sticky-stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  perspective: 1500px;
+  perspective-origin: 50% 50%;
+  background:
+    radial-gradient(circle at 50% 44%, rgba(100,70,45,.10), transparent 34%),
+    #070605;
+  contain: layout paint style;
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: translate3d(0,0,0);
+  will-change: transform;
+  backface-visibility: hidden;
+  pointer-events: none;
+}
+
+.memory-shell {
+  --focus-scale: 1;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(66vw, 1000px);
+  aspect-ratio: 16 / 9;
+  height: auto;
+  transform-style: preserve-3d;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  backface-visibility: hidden;
+  contain: layout style;
+}
+
+.memory-visual-clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: clamp(16px, 1.35vw, 24px);
+}
+
+.memory-visual {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: clamp(16px, 1.35vw, 24px);
+  background: #12100e;
+  border: 1px solid rgba(255,255,255,.15);
+  box-shadow:
+    0 34px 90px rgba(0,0,0,.48),
+    0 8px 30px rgba(0,0,0,.22),
+    0 0 0 1px rgba(255,255,255,.025);
+  transform: translateZ(0) scale(var(--focus-scale));
+  transform-origin: center;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.memory-visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(145deg, rgba(255,255,255,.08), transparent 30%, transparent 72%, rgba(0,0,0,.16));
+}
+
+.memory-visual img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  background: #12100e;
+  user-select: none;
+  -webkit-user-drag: none;
+  backface-visibility: hidden;
+}
+
+.memory-copy {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  width: min(25vw, 320px, calc((100vw - min(66vw, 1000px)) / 2 - clamp(28px, 3.2vw, 58px)));
+  transform: translate3d(var(--copy-x, 0), calc(var(--copy-base-y, -50%) + var(--copy-offset-y, 18px)), 0) scale(var(--copy-scale, .985));
+  transform-origin: center;
+  visibility: hidden;
+  opacity: 0;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+.memory-shell.left .memory-copy {
+  right: calc(100% + clamp(28px, 3.2vw, 58px));
+  text-align: right;
+}
+
+.memory-shell.right .memory-copy {
+  left: calc(100% + clamp(28px, 3.2vw, 58px));
+  text-align: left;
+}
+
+.memory-label {
+  display: block;
+  margin-bottom: 11px;
+  color: rgba(255,255,255,.46);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .4em;
+}
+
+.memory-copy h2 {
+  margin: 0 0 10px;
+  color: #faf5ef;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(23px, 2.15vw, 35px);
+  line-height: 1.07;
+  letter-spacing: -.04em;
+  font-weight: 500;
+}
+
+.memory-copy p {
+  margin: 0;
+  color: rgba(250,245,239,.65);
+  font-size: clamp(12px, .9vw, 15px);
+  line-height: 1.6;
+}
+
+.final-reveal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 20;
+  width: min(88vw, 1000px);
+  text-align: center;
+  visibility: hidden;
+  opacity: 0;
+  transform: translate3d(-50%, 22px, 0) scale(.97);
+  will-change: transform, opacity;
+  pointer-events: none;
+  text-shadow: 0 3px 35px rgba(0,0,0,.42);
+}
+
+.final-kicker {
+  margin: 0 0 13px;
+  color: rgba(255,255,255,.62);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .42em;
+  text-transform: uppercase;
+}
+
+.final-reveal h1 {
+  margin: 0;
+  color: #fff8f0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(48px, 6.6vw, 94px);
+  line-height: .94;
+  letter-spacing: -.06em;
+  font-weight: 500;
+}
+
+.final-reveal h2 {
+  margin: 16px 0 9px;
+  color: rgba(255,255,255,.94);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(22px, 2.7vw, 38px);
+  font-weight: 400;
+  letter-spacing: -.035em;
+}
+
+.final-reveal p:last-child {
+  max-width: 570px;
+  margin: 0 auto;
+  color: rgba(255,255,255,.66);
+  font-size: clamp(13px, 1.1vw, 17px);
+  line-height: 1.65;
+}
+
+@keyframes indicatorMove {
+  0% { opacity: 0; transform: translate(-50%, -2px); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, 9px); }
+}
+
+@media (max-width: 1200px) {
+  .memory-shell { width: min(65vw, 900px); }
+  .memory-copy {
+    width: min(23vw, 270px, calc((100vw - min(65vw, 900px)) / 2 - clamp(28px, 3.2vw, 58px)));
+  }
+}
+
+@media (max-width: 900px) {
+  .memory-shell {
+    width: min(82vw, 720px);
+  }
+
+  .memory-shell.left .memory-copy,
+  .memory-shell.right .memory-copy {
+    top: calc(100% + 17px);
+    left: 50%;
+    right: auto;
+    width: min(82vw, 560px);
+    --copy-x: -50%;
+    --copy-base-y: 0px;
+    text-align: center;
+  }
+
+  .memory-copy h2 { font-size: clamp(20px, 4vw, 29px); }
+  .memory-copy p { font-size: 12px; }
+  .memory-label { margin-bottom: 7px; }
+}
+
+@media (max-width: 600px) {
+  .sticky-stage { perspective: 1150px; }
+  .memory-shell { width: 88vw; }
+  .memory-visual { border-radius: 15px; }
+  .memory-shell.left .memory-copy,
+  .memory-shell.right .memory-copy {
+    top: calc(100% + 11px);
+    width: 84vw;
+  }
+  .memory-copy h2 { font-size: 19px; }
+  .memory-copy p { font-size: 11px; }
+  .story-progress { right: 11px; font-size: 8px; }
+  .progress-divider { height: 38px; }
+  .scroll-hint { bottom: 16px; font-size: 7px; }
+  .scroll-indicator { width: 18px; height: 30px; }
+  .final-reveal { width: 88vw; }
+  .final-reveal h1 { font-size: clamp(38px, 11vw, 58px); }
+  .final-reveal h2 { font-size: 22px; }
+  .final-reveal p:last-child { font-size: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-indicator::after { animation: none; }
+  .journey { height: 100vh; }
+}
